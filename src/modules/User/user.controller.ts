@@ -1,5 +1,5 @@
 import { User } from ".prisma/client";
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param } from "@nestjs/common";
 import { UserService } from "./user.service";
 
 @Controller('users')
@@ -10,13 +10,21 @@ export class UserController {
 
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    return await this.userService.findAll();
   }
 
   @Get(':id')
   async findById(
     @Param('id') id: string
   ): Promise<User> {
-    return this.userService.findById(id);
+    return await this.userService.findById(id);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
+    @Param('id') id: string
+  ): Promise<void> {
+    await this.userService.delete(id);
   }
 }

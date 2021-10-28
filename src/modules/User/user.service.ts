@@ -14,7 +14,16 @@ export class UserService {
   }
 
   async findById(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        tasks: true
+      }
+    });
     return user;
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.user.delete({ where: { id } });
   }
 }
