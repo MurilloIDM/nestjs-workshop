@@ -1,12 +1,20 @@
 import { User } from "@prisma/client";
-import { Controller, Delete, Get, HttpCode, HttpStatus, Param } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
+import { CreateUserDTO } from "./dto/createUserDTO";
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService
   ) {}
+
+  @Post()
+  async create(
+    @Body() body: CreateUserDTO
+  ): Promise<void> {
+    return await this.userService.create(body);
+  }
 
   @Get()
   async findAll(): Promise<User[]> {
