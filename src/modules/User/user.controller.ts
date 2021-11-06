@@ -1,7 +1,8 @@
 import { User } from "@prisma/client";
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/createUserDTO";
+import { UpdateUserDTO } from "./dto/updateUserDTO";
 
 @Controller('users')
 export class UserController {
@@ -9,14 +10,22 @@ export class UserController {
     private readonly userService: UserService
   ) {}
 
-  @Post()
+  @Post('')
   async create(
     @Body() body: CreateUserDTO
   ): Promise<void> {
-    return await this.userService.create(body);
+    await this.userService.create(body);
   }
 
-  @Get()
+  @Put(':id')
+  async update(
+    @Body() body: UpdateUserDTO,
+    @Param('id') id: string
+  ): Promise<void> {
+    await this.userService.update(body, id);
+  }
+
+  @Get('')
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }

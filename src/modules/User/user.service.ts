@@ -1,7 +1,11 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../Prisma/prisma.service";
 import { User } from "@prisma/client";
+
 import { CreateUserDTO } from "./dto/createUserDTO";
+import { UpdateUserDTO } from "./dto/updateUserDTO";
+
+import { get } from "lodash";
 
 @Injectable()
 export class UserService {
@@ -16,9 +20,35 @@ export class UserService {
       throw new HttpException("User already exists with username!", 400);
     }
 
-    await this.prisma.user.create({ data: {
-      username
-    }});
+    await this.prisma.user.create({
+      data: {
+        username
+      }
+    });
+  }
+
+  async update({ username }: UpdateUserDTO, id: string): Promise<void> {
+    const userAlreadyExists = await this.findById(id);
+
+    if (!userAlreadyExists) {
+      throw new HttpException("User not already exists!", 400);
+    }
+
+    const userAlreadyExistsWithUsername = await this.findByUsername(username);
+    const idUserWithUsername = get(userAlreadyExistsWithUsername, "id", "");
+
+    const isRecord = idUserWithUsername === id;
+
+    if (userAlreadyExistsWithUsername && !isRecord) {
+      throw new HttpException("User already exists with username!", 400);
+    }
+
+    await this.prisma.user.update({
+      data: {
+        username
+      },
+      where: { id }
+    })
   }
 
   async findAll(): Promise<User[]> {
