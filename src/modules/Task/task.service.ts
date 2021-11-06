@@ -12,4 +12,11 @@ export class TaskService {
     const tasks = await this.prisma.task.findMany();
     return tasks;
   }
+
+  async findAllByUser(userId: string): Promise<Task[]> {
+    const tasks = await this.prisma.task.findMany({
+      where: { userId }
+    });
+    return tasks;
+  }
 }
