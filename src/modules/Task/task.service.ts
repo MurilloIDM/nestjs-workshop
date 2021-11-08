@@ -3,6 +3,7 @@ import { HttpException, Injectable } from "@nestjs/common";
 import { isEmpty } from "lodash";
 import { PrismaService } from "../Prisma/prisma.service";
 import { CreateTaskDTO } from "./dto/CreateTaskDTO";
+import { UpdateTaskDTO } from "./dto/updateTaskDTO";
 
 @Injectable()
 export class TaskService {
@@ -22,6 +23,27 @@ export class TaskService {
         description,
         priority: Priority[priorityValue],
         userId
+      }
+    });
+
+    return task;
+  }
+
+  async update({
+    title,
+    description,
+    priorityValue,
+  }: UpdateTaskDTO, id: string): Promise<Task> {
+    await this.findById(id);
+
+    const task = await this.prisma.task.update({
+      data: {
+        title,
+        description,
+        priority: Priority[priorityValue]
+      },
+      where: {
+        id
       }
     });
 
