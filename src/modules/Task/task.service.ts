@@ -11,13 +11,6 @@ export class TaskService {
 
   async findAll(): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany();
-    return tasks;
-  }
-
-  async findAllByUser(userId: string): Promise<Task[]> {
-    const tasks = await this.prisma.task.findMany({
-      where: { userId }
-    });
 
     if (isEmpty(tasks)) {
       throw new HttpException("No Content", 204);
@@ -36,5 +29,25 @@ export class TaskService {
     }
 
     return task;
+  }
+
+  async findAllByUser(userId: string): Promise<Task[]> {
+    const tasks = await this.prisma.task.findMany({
+      where: { userId }
+    });
+
+    if (isEmpty(tasks)) {
+      throw new HttpException("No Content", 204);
+    }
+
+    return tasks;
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.findById(id);
+
+    await this.prisma.task.delete({
+      where: { id }
+    });
   }
 }
