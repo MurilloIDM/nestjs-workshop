@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import { CreateUserDTO } from "./dto/createUserDTO";
 import { UpdateUserDTO } from "./dto/updateUserDTO";
 
-import { get } from "lodash";
+import {  get, isEmpty } from "lodash";
 
 @Injectable()
 export class UserService {
@@ -28,11 +28,7 @@ export class UserService {
   }
 
   async update({ username }: UpdateUserDTO, id: string): Promise<void> {
-    const userAlreadyExists = await this.findById(id);
-
-    if (!userAlreadyExists) {
-      throw new HttpException("User not already exists!", 400);
-    }
+    await this.findById(id);
 
     const userAlreadyExistsWithUsername = await this.findByUsername(username);
     const idUserWithUsername = get(userAlreadyExistsWithUsername, "id", "");
@@ -48,11 +44,16 @@ export class UserService {
         username
       },
       where: { id }
-    })
+    });
   }
 
   async findAll(): Promise<User[]> {
     const users = await this.prisma.user.findMany({ include: { tasks: true } });
+
+    if (isEmpty(users)) {
+      throw new HttpException("No Content", 204);
+    }
+
     return users;
   }
 
@@ -63,6 +64,11 @@ export class UserService {
         tasks: true
       }
     });
+
+    if (!user) {
+      throw new HttpException("User does not exist with this [id]!", 400);
+    }
+
     return user;
   }
 
@@ -79,6 +85,10 @@ export class UserService {
   }
 
   async delete(id: string): Promise<void> {
+    await this.findById(id);
+
+    await this.prisma.task.deleteMany({ where: { userId: id } });
+
     await this.prisma.user.delete({ where: { id } });
   }
 }

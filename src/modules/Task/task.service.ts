@@ -2,13 +2,15 @@ import { Priority, Task } from ".prisma/client";
 import { HttpException, Injectable } from "@nestjs/common";
 import { isEmpty } from "lodash";
 import { PrismaService } from "../Prisma/prisma.service";
+import { UserService } from "../User/user.service";
 import { CreateTaskDTO } from "./dto/CreateTaskDTO";
 import { UpdateTaskDTO } from "./dto/updateTaskDTO";
 
 @Injectable()
 export class TaskService {
   constructor(
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly userService: UserService,
   ) {}
 
   async create({
@@ -73,6 +75,8 @@ export class TaskService {
   }
 
   async findAllByUser(userId: string): Promise<Task[]> {
+    await this.userService.findById(userId);
+
     const tasks = await this.prisma.task.findMany({
       where: { userId }
     });
