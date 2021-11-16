@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ExceptionModule } from './modules/Exception/exception.module';
 import { PrismaModule } from './modules/Prisma/prisma.module';
 import { TaskModule } from './modules/Task/task.module';
 import { UserModule } from './modules/User/user.module';
@@ -8,6 +9,7 @@ import { UserModule } from './modules/User/user.module';
     PrismaModule,
     UserModule,
     TaskModule,
+    ExceptionModule,
   ]
 })
 
