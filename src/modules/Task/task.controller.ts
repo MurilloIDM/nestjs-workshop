@@ -1,5 +1,6 @@
 import { Task } from ".prisma/client";
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { AdminGuard } from "src/guards/admin.guard";
 import { CreateTaskDTO } from "./dto/CreateTaskDTO";
 import { UpdateTaskDTO } from "./dto/updateTaskDTO";
 import { TaskService } from "./task.service";
@@ -24,6 +25,7 @@ export class TaskController {
   }
 
   @Get('')
+  @UseGuards(AdminGuard)
   async findAll(): Promise<Task[]> {
     return await this.taskService.findAll();
   }
