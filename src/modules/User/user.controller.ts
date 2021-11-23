@@ -1,8 +1,10 @@
 import { User } from "@prisma/client";
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/createUserDTO";
 import { UpdateUserDTO } from "./dto/updateUserDTO";
+import { LoggingInterceptor } from "src/interceptors/logging.interceptor";
+import { TransformInterceptor } from "src/interceptors/transform.interceptor";
 
 @Controller('users')
 export class UserController {
@@ -26,6 +28,7 @@ export class UserController {
   }
 
   @Get('')
+  @UseInterceptors(TransformInterceptor)
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
