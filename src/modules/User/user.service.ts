@@ -13,7 +13,7 @@ export class UserService {
     private readonly prisma: PrismaService
   ) {}
 
-  async create({ username }: CreateUserDTO): Promise<void> {
+  async create({ username, password }: CreateUserDTO): Promise<void> {
     const userAlreadyExists = await this.findByUsername(username);
 
     if (userAlreadyExists) {
@@ -22,7 +22,8 @@ export class UserService {
 
     await this.prisma.user.create({
       data: {
-        username
+        username,
+        password,
       }
     });
   }

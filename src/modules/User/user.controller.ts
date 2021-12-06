@@ -3,7 +3,6 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/createUserDTO";
 import { UpdateUserDTO } from "./dto/updateUserDTO";
-import { LoggingInterceptor } from "src/interceptors/logging.interceptor";
 import { TransformInterceptor } from "src/interceptors/transform.interceptor";
 
 @Controller('users')
