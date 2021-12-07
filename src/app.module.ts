@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthJwtModule } from './modules/AuthJwt/authJwt.module';
-import { AuthLocalModule } from './modules/AuthLocal/authLocal.module';
+import { AuthModule } from './modules/AuthLocal/auth.module';
 import { ExceptionModule } from './modules/Exception/exception.module';
 import { PipesModule } from './modules/Pipes/pipes.module';
 import { PrismaModule } from './modules/Prisma/prisma.module';
@@ -14,8 +13,7 @@ import { UserModule } from './modules/User/user.module';
     TaskModule,
     ExceptionModule,
     PipesModule,
-    AuthLocalModule,
-    AuthJwtModule,
+    AuthModule,
   ]
 })
 

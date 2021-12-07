@@ -1,9 +1,10 @@
 import { User } from "@prisma/client";
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/createUserDTO";
 import { UpdateUserDTO } from "./dto/updateUserDTO";
 import { TransformInterceptor } from "src/interceptors/transform.interceptor";
+import { AuthJwtGuard } from "../AuthLocal/authJwt.guard";
 
 @Controller('users')
 export class UserController {
@@ -27,6 +28,7 @@ export class UserController {
   }
 
   @Get('')
+  @UseGuards(AuthJwtGuard)
   @UseInterceptors(TransformInterceptor)
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
