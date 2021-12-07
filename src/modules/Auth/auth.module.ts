@@ -13,7 +13,7 @@ import { AuthLocalStrategy } from "./authLocal.strategy";
     PassportModule,
     JwtModule.register({
       secret: "2F93B98BA3AEABAFEFC4C29EBD867549BD1D71C", // Exposto apenas para testes
-      signOptions: { expiresIn: '1m' }
+      signOptions: { expiresIn: '90m', algorithm: "HS384" },
     })
   ],
   exports: [AuthService],
