@@ -5,6 +5,7 @@ import { CreateUserDTO } from "./dto/createUserDTO";
 import { UpdateUserDTO } from "./dto/updateUserDTO";
 import { TransformInterceptor } from "src/interceptors/transform.interceptor";
 import { AuthJwtGuard } from "../Auth/authJwt.guard";
+import { TokenGuard } from "../AuthToken/token.guard";
 
 @Controller('users')
 export class UserController {
@@ -28,7 +29,7 @@ export class UserController {
   }
 
   @Get('')
-  @UseGuards(AuthJwtGuard)
+  @UseGuards(TokenGuard)
   @UseInterceptors(TransformInterceptor)
   async findAll(@Request() req): Promise<User[]> {
     console.log(req);
